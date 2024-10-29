@@ -1,26 +1,50 @@
+from datetime import datetime
+from collections import deque
+
 class SMS:
-    def __init__(self, numero_origen, numero_destino, mensaje):
-        self.numero_origen = numero_origen
-        self.numero_destino = numero_destino
-        self.mensaje = mensaje
-        self.fecha = None  # Aqui puedes agregar la logica para establecer la fecha
-        self.leido = False
-    def enviar(self):
-       
-        print(f"Enviando SMS de {self.numero_origen} a {self.numero_destino}: {self.mensaje}")
+    def __init__(self):
+        self.historial_sms = deque()  # Cola para almacenar mensajes en orden de llegada.
 
-    def recibir(self, mensaje, numero_origen):
-        
-        self.mensaje = mensaje
-        self.numero_origen = numero_origen
-        self.leido = False
-        print(f"Recibido SMS de {self.numero_origen}: {self.mensaje}")
+    def enviar_sms(self, numero_origen, numero_destino, mensaje):
+        """Envia un SMS y lo agrega al historial."""
+        sms = {
+            'numero_origen': numero_origen,
+            'numero_destino': numero_destino,
+            'mensaje': mensaje,
+            'fecha': datetime.now(),
+            'leido': True
+        }
+        self.historial_sms.append(sms)
+        print(f"Enviando SMS de {numero_origen} a {numero_destino}: {mensaje}")
 
-    def listar_sms(self):
-        
-        print(f"Mensaje de {self.numero_origen}: {self.mensaje} - Leido: {self.leido}")
-    
-    def eliminar_sms(self):
-        
-        print(f"Eliminando SMS de {self.numero_origen}: {self.mensaje}")
-       
+    def recibir_sms(self, numero_origen, numero_destino, mensaje):
+        """Recibe un SMS y lo agrega al historial."""
+        sms = {
+            'numero_origen': numero_origen,
+            'numero_destino': numero_destino,
+            'mensaje': mensaje,
+            'fecha': datetime.now(),
+            'leido': False
+        }
+        self.historial_sms.append(sms)
+        print(f"Recibido SMS de {numero_origen} a {numero_destino}: {mensaje}")
+
+    def ver_historial_sms(self):
+        """Muestra el historial completo de SMS, ordenado por fecha de llegada."""
+        if not self.historial_sms:
+            print("No hay SMS en el historial.")
+            return
+
+        for sms in self.historial_sms:
+            estado = "Leido" if sms['leido'] else "No leido"
+            print(f"Fecha: {sms['fecha']}, Origen: {sms['numero_origen']}, Destino: {sms['numero_destino']}, Estado: {estado}")
+            print(f"Mensaje: {sms['mensaje']}\n")
+
+    def eliminar_sms(self, numero_sms):
+        """Elimina un SMS especifico del historial por su numero."""
+        if 0 <= numero_sms < len(self.historial_sms):
+            eliminado = self.historial_sms[numero_sms]
+            del self.historial_sms[numero_sms]
+            print(f'SMS de {eliminado["numero_origen"]} a {eliminado["numero_destino"]} eliminado.')
+        else:
+            print("El numero de SMS no es valido.")
