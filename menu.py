@@ -1,4 +1,6 @@
-from telefono import Telefono
+from telefono import Telefono  # Para la instancia del telefono que se pasa a las funciones del menu
+from llamada import Llamada    # Para crear y gestionar las llamadas en `menu_llamadas`
+from sms import SMS            # Para manejar la mensajeria SMS en `menu_sms`
 
 def mostrar_menu_principal(telefono):
     while True:
@@ -59,7 +61,6 @@ def menu_contactos(telefono):
             break
         else:
             print("Opcion no valida. Intente de nuevo.")
-
 def menu_sms(telefono):
     while True:
         print("\n--- Menu de Mensajeria SMS ---")
@@ -70,22 +71,24 @@ def menu_sms(telefono):
         opcion = input("Seleccione una opcion: ")
 
         if opcion == "1":
+            # Enviar SMS
             numero_destino = input("Ingrese el numero de destino: ")
             mensaje = input("Ingrese el mensaje: ")
-            telefono.sms_bandeja.append(SMS(telefono.num_telefono, numero_destino, mensaje))
-            telefono.sms_bandeja[-1].enviar()
+            # Llamamos al metodo enviar_sms de la clase SMS a traves de telefono.sms
+            telefono.sms.enviar_sms(telefono.num_telefono, numero_destino, mensaje)
+        
         elif opcion == "2":
-            for sms in telefono.sms_bandeja:
-                sms.listar_sms()
+            # Ver historial de SMS (bandeja de entrada)
+            telefono.sms.ver_historial_sms()
+        
         elif opcion == "3":
-            index = int(input("Ingrese el indice del mensaje a eliminar: "))
-            if 0 <= index < len(telefono.sms_bandeja):
-                telefono.sms_bandeja[index].eliminar_sms()
-                del telefono.sms_bandeja[index]
-            else:
-                print("Indice no valido.")
+            # Eliminar el SMS mas antiguo
+            telefono.sms.eliminar_sms()
+        
         elif opcion == "0":
+            # Salir del menu de SMS
             break
+        
         else:
             print("Opcion no valida. Intente de nuevo.")
 

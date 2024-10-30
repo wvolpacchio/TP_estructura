@@ -1,5 +1,4 @@
 from app import App
-
 class AppStore:
     def __init__(self):
         self.aplicaciones_disponibles = [
@@ -17,11 +16,8 @@ class AppStore:
         return None
 
     def descargar_app(self, telefono, nombre_app):
-        app = self.buscar_app(nombre_app)
-        if app:
-            if telefono.cap_almacenamiento >= 50:
-                telefono.dic_aplicaciones[app["nombre"]] = app
-                telefono.cap_almacenamiento -= 50
-                print(f"Aplicacion {app['nombre']} descargada exitosamente en {telefono.nombre}.")
-            else:
-                print("No hay suficiente espacio en el telefono para descargar la aplicacion.")
+        app_info = self.buscar_app(nombre_app)
+        if app_info:
+            app = App(app_info["nombre"], app_info["version"], app_info["categoria"])
+            telefono.dic_aplicaciones[app.nombre] = app  # Guardar una instancia de App
+            print(f"Aplicación {app.nombre} descargada exitosamente en {telefono.nombre}.")

@@ -39,12 +39,11 @@ class SMS:
             estado = "Leido" if sms['leido'] else "No leido"
             print(f"Fecha: {sms['fecha']}, Origen: {sms['numero_origen']}, Destino: {sms['numero_destino']}, Estado: {estado}")
             print(f"Mensaje: {sms['mensaje']}\n")
-
-    def eliminar_sms(self, numero_sms):
-        """Elimina un SMS especifico del historial por su numero."""
-        if 0 <= numero_sms < len(self.historial_sms):
-            eliminado = self.historial_sms[numero_sms]
-            del self.historial_sms[numero_sms]
+            
+    def eliminar_sms(self):
+        """Elimina el SMS más antiguo del historial."""
+        if self.historial_sms:
+            eliminado = self.historial_sms.popleft()  # Elimina del frente de la cola
             print(f'SMS de {eliminado["numero_origen"]} a {eliminado["numero_destino"]} eliminado.')
         else:
-            print("El numero de SMS no es valido.")
+            print("No hay SMS para eliminar.")

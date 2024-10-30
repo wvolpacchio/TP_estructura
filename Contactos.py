@@ -1,22 +1,39 @@
+class NodoContacto:
+    def __init__(self, nombre, numero):
+        self.nombre = nombre
+        self.numero = numero
+        self.siguiente = None
+
 class Contactos:
     def __init__(self):
-        self.lista_contactos = []
+        self.cabeza = None
 
     def agendar_contacto(self, nombre, numero):
-        self.lista_contactos.append({"nombre": nombre, "numero": numero})
-        print(f'Contacto {nombre} agendado con exito.')
+        nuevo_contacto = NodoContacto(nombre, numero)
+        if not self.cabeza:
+            self.cabeza = nuevo_contacto
+        else:
+            actual = self.cabeza
+            while actual.siguiente:
+                actual = actual.siguiente
+            actual.siguiente = nuevo_contacto
+        print(f'Contacto {nombre} agendado con éxito.')
 
     def actualizar_contacto(self, nombre, nuevo_numero):
-        for contacto in self.lista_contactos:
-            if contacto["nombre"] == nombre:
-                contacto["numero"] = nuevo_numero
-                print(f'Numero de {nombre} actualizado a {nuevo_numero}.')
+        actual = self.cabeza
+        while actual:
+            if actual.nombre == nombre:
+                actual.numero = nuevo_numero
+                print(f'Número de {nombre} actualizado a {nuevo_numero}.')
                 return
+            actual = actual.siguiente
         print(f'Contacto {nombre} no encontrado.')
 
     def mostrar_contactos(self):
-        if not self.lista_contactos:
-            print("La lista de contactos esta vacia.")
+        if not self.cabeza:
+            print("La lista de contactos está vacía.")
         else:
-            for contacto in self.lista_contactos:
-                print(f'Nombre: {contacto["nombre"]}, Numero: {contacto["numero"]}')
+            actual = self.cabeza
+            while actual:
+                print(f'Nombre: {actual.nombre}, Número: {actual.numero}')
+                actual = actual.siguiente

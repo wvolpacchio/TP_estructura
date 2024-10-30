@@ -1,4 +1,4 @@
-class Aplicacion:
+class App:
     def __init__(self, nombre, version, categoria):
         self.nombre = nombre
         self.version = version
